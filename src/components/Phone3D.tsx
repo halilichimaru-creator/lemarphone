@@ -2,6 +2,7 @@ import { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, ContactShadows, PresentationControls, Float } from '@react-three/drei';
 import * as THREE from 'three';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const PhoneModel = () => {
     const group = useRef<THREE.Group>(null);
@@ -48,11 +49,26 @@ const PhoneModel = () => {
 };
 
 const Phone3D = () => {
+    const isMobile = useIsMobile();
+    
+    // Sur mobile, afficher une image statique au lieu du modèle 3D
+    if (isMobile) {
+        return (
+            <div className="w-full h-[600px] relative z-10 flex items-center justify-center">
+                <img
+                    src="/iphone-hero.png"
+                    alt="iPhone"
+                    className="w-full h-full object-contain"
+                />
+            </div>
+        );
+    }
+    
     return (
         <div className="w-full h-[600px] relative z-10 cursor-grab active:cursor-grabbing">
-            <Canvas shadows camera={{ position: [0, 0, 10], fov: 45 }}>
+            <Canvas shadows camera={{ position: [0, 0, 10], fov: 45 }} dpr={[1, 1.5]}>
                 <ambientLight intensity={0.5} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={2048} castShadow />
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={1024} castShadow />
                 <pointLight position={[-10, -10, -10]} intensity={1} />
 
                 <Suspense fallback={null}>
@@ -66,7 +82,7 @@ const Phone3D = () => {
                         <PhoneModel />
                     </PresentationControls>
                     <Environment preset="city" />
-                    <ContactShadows position={[0, -4.5, 0]} opacity={0.4} scale={20} blur={2} far={4.5} />
+                    <ContactShadows position={[0, -4.5, 0]} opacity={0.4} scale={20} blur={1.5} far={4.5} />
                 </Suspense>
             </Canvas>
         </div>

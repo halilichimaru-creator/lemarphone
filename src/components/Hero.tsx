@@ -1,24 +1,29 @@
 import { motion } from 'framer-motion';
 import { Smartphone, Shield, Zap } from 'lucide-react';
 import Prism from './Prism';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const Hero = () => {
+    const isMobile = useIsMobile();
+    
     return (
         <section id="accueil" className="relative min-h-screen flex items-center overflow-hidden bg-black">
-            {/* Prism Background Overlay */}
-            <div className="absolute inset-0 z-0 opacity-70">
-                <Prism
-                    animationType="rotate"
-                    timeScale={0.5}
-                    height={3.5}
-                    baseWidth={5.5}
-                    scale={5.0}
-                    hueShift={0}
-                    colorFrequency={1}
-                    noise={0}
-                    glow={1}
-                />
-            </div>
+            {/* Prism Background Overlay - Désactivé sur mobile pour les performances */}
+            {!isMobile && (
+                <div className="absolute inset-0 z-0 opacity-70">
+                    <Prism
+                        animationType="rotate"
+                        timeScale={0.5}
+                        height={3.5}
+                        baseWidth={5.5}
+                        scale={5.0}
+                        hueShift={0}
+                        colorFrequency={1}
+                        noise={0}
+                        glow={1}
+                    />
+                </div>
+            )}
 
             {/* Content Container */}
             <div className="max-w-6xl mx-auto px-6 pt-20 pb-12 relative z-10 w-full">
